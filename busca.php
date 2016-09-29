@@ -8,7 +8,7 @@ if (!isset($_GET['consulta'])) {
 
 $busca = mysql_real_escape_string($_GET['consulta']);
 $sql = "SELECT * FROM Compra WHERE ((Data_Compra LIKE '%".$busca."%') AND FINALIZADO='F')";
-$query = mysql_query($sql);
+$query = $connection->query($sql);
 ?>
 
 <!DOCTYPE html>
