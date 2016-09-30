@@ -3,9 +3,17 @@ include_once 'dbconfig.php';
 
 // delete condition
 if (isset($_GET['delete_id'])) {
-	$sql_query = "DELETE FROM Estoque_Produto WHERE id_Estoque=" . $_GET['delete_id'];
-	$prepStm = $connection->prepare($sql_query);
-	$prepStm->execute();
+	try {
+		$sql_query = "DELETE FROM Estoque_Produto WHERE id_Estoque=" . $_GET['delete_id'];
+		$prepStm = $connection->prepare($sql_query);
+		$prepStm->execute();
+	} catch (PDOException $e) {
+		echo "
+			<script>
+				alert('Houve um erro ao tentar deletar o produto');
+			</script>
+		";
+	}
 	header("Location: $_SERVER[PHP_SELF]");
 }
 // delete condition

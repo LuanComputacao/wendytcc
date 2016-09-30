@@ -23,14 +23,13 @@ if (isset($_POST['btn-update'])) {
 	// variables for input data
 
 	// sql query for update data into database
-	$sql_query = "UPDATE Estoque_Produto SET Codigo_Produto='$CodigoProduto',Nome_Produto='$NomeProduto',Descricao_Produto='$DescricaoProduto',Quantidade_Estoque='$Quantidade',Preco = $Preco WHERE id_Estoque=$i";
-	$prepStm = $connection->prepare($sql_query);
-//"UPDATE `estoque_produto` SET `idESTOQUE_PRODUTO`= $i,`CODIGO_PRODUTO`= $CodigoProduto,`NOME_PRODUTO`= $NomeProduto,`DESCRICAO_PRODUTO`= $DescricaoProduto,`QUANTIDADE`= $Quantidade,`PRECO`= $Preco WHERE `idESTOQUE_PRODUTO`= $i";
-
-	// sql query for update data into database
-
-	// sql query execution function
-	if ($prepStm->fetch() > 0) {
+	try {
+		$sql_query = "UPDATE Estoque_Produto SET Codigo_Produto='$CodigoProduto',Nome_Produto='$NomeProduto',Descricao_Produto='$DescricaoProduto',Quantidade_Estoque='$Quantidade',Preco = $Preco WHERE id_Estoque=$i";
+		$prepStm = $connection->prepare($sql_query);
+	} catch (PDOException $e) {
+		die($e);
+	}
+	if ($prepStm->execute()) {
 		?>
 		<script type="text/javascript">
 			alert('Dados atualizados com sucesso!');
@@ -58,7 +57,7 @@ if (isset($_POST['btn-cancel'])) {
 	<link rel="stylesheet" href="style.css" type="text/css"/>
 </head>
 <body>
-<center>
+<div style="margin: auto">
 
 	<div id="header">
 		<div id="content">
@@ -98,6 +97,6 @@ if (isset($_POST['btn-cancel'])) {
 		</div>
 	</div>
 
-</center>
+</div>
 </body>
 </html>
