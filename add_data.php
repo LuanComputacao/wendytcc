@@ -17,9 +17,22 @@ if (isset($_POST['btn-save'])) {
 
 		<?php
 	} else {
+		try {
+			$sql_query = "INSERT INTO Estoque_Produto (Codigo_Produto,Nome_Produto,Descricao_Produto,Quantidade_Estoque,Preco) VALUES('$CodigoProduto','$NomeProduto','$DescricaoProduto','$Quantidade','$Preco')";
+			$prepStm = $connection->prepare($sql_query);
+			$rowsAffected = $prepStm->execute();
+			if ($rowsAffected < 1) {
+				echo "
+					<script type=\"text/javascript\">
+						alert('Ocorreu um erro ao salvar. Fale com o administrador do sistema!');
+						window.location.href = 'add_data.php';
+					</script>
+				";
+			}
+		} catch (PDOException $e) {
+			die($e->getMessage());
+		}
 
-		$sql_query = "INSERT INTO estoque_produto (Codigo_Produto,Nome_Produto,Descricao_Produto,Quantidade_Estoque,Preco) VALUES('$CodigoProduto','$NomeProduto','$DescricaoProduto','$Quantidade','$Preco')";
-		$connection->query($sql_query);
 	}
 }
 
@@ -49,7 +62,7 @@ if (isset($_POST['btn-cancel1'])) {
 				<table align="center">
 
 					<tr>
-						<td><input type="text" name="CodigoProduto" placeholder="Código de barras"/></td>
+						<td><input type="text" name="CodigoProduto" placeholder="Código de barras" maxlength="10"/></td>
 					</tr>
 					<tr>
 						<td><input type="text" name="NomeProduto" placeholder="Nome"/></td>

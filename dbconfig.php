@@ -17,5 +17,10 @@ $config['db_user']  = 'homestead';
 $config['db_pass']  = 'secret';
 
 
-$connection = new PDO($config['db_dsn'], $config['db_user'], $config['db_pass']) or die('MySQL connection problem');
-$connection->query("use ". $config['db_name']);
+try {
+	$connection = new PDO($config['db_dsn'], $config['db_user'], $config['db_pass']);
+	$connection->query("use ". $config['db_name']);
+} catch (PDOException $e) {
+	echo $e->getMessage();
+	die();
+}

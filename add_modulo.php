@@ -8,16 +8,19 @@ if (isset($_POST['btn-save'])) {
 	if (($CodigoModulo == '')) {
 		?>
 		<script type="text/javascript">
-			alert('Impossivel salvar dados em branco! Tente novamente!');
+			alert('Você não informou o módulo, preencha novamente!');
 			window.location.href = 'add_modulo.php';
 		</script>
 
 		<?php
 	} else {
-
-		$sql_query = "INSERT INTO modulo (Ip_Modulo,Status_Modulo) VALUES ('$CodigoModulo', 'I')";
-		$prepStm = $connection->query($sql_query);
-		$prepStm->execute();
+		try {
+			$sql_query = "INSERT INTO modulo (Ip_Modulo,Status_Modulo) VALUES ('$CodigoModulo', 'I')";
+			$prepStm = $connection->query($sql_query);
+			$prepStm->execute();
+		} catch (PDOException $e) {
+			die($e->getMessage());
+		}
 	}
 }
 

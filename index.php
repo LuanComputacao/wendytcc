@@ -3,8 +3,9 @@ include_once 'dbconfig.php';
 
 // delete condition
 if (isset($_GET['delete_id'])) {
-	$sql_query = "DELETE FROM estoque_produto WHERE id_Estoque=" . $_GET['delete_id'];
-	mysql_query($sql_query);
+	$sql_query = "DELETE FROM Estoque_Produto WHERE id_Estoque=" . $_GET['delete_id'];
+	$prepStm = $connection->prepare($sql_query);
+	$prepStm->execute();
 	header("Location: $_SERVER[PHP_SELF]");
 }
 // delete condition
@@ -54,12 +55,15 @@ if (isset($_GET['delete_id'])) {
 
 					<th colspan="2"></th>
 				</tr>
+
+
+
 				<?php
 				$sql_query = "SELECT id_Estoque,Codigo_Produto,Nome_Produto,Descricao_Produto,Quantidade_Estoque,Preco FROM Estoque_Produto";
 				$prepStm = $connection->query($sql_query);
 
 				while ($row = $prepStm->fetch(PDO::FETCH_NUM, PDO::FETCH_ORI_NEXT)) {
-					?>
+				?>
 					<tr>
 						<td><?php echo $row[0]; ?></td>
 						<td><?php echo $row[1]; ?></td>
@@ -71,9 +75,12 @@ if (isset($_GET['delete_id'])) {
 						<td align="center"><a href="javascript:delete_id('<?php echo $row[0]; ?>')">Excluir</a></td>
 					</tr>
 
-					<?php
+				<?php
 				}
 				?>
+
+
+
 				<tr>
 					<th colspan="4"><a href="add_data.php">ADICIONAR NOVO PRODUTO</a></th>
 					<th colspan="4"><a href="pagIni.php">VOLTAR</a></th>

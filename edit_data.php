@@ -3,9 +3,14 @@ include_once 'dbconfig.php';
 $i = $_GET['edit_id'];
 
 if (isset($i)) {
-	$sql_query = "SELECT id_Estoque, Codigo_Produto, Nome_Produto, Descricao_Produto, Quantidade_Estoque, Preco FROM estoque_produto WHERE id_Estoque=" . $i;
-	$result_set = mysql_query($sql_query);
-	$row = mysql_fetch_array($result_set);
+	try {
+		$sql_query = "SELECT id_Estoque, Codigo_Produto, Nome_Produto, Descricao_Produto, Quantidade_Estoque, Preco FROM Estoque_Produto WHERE id_Estoque=" . $i;
+		$prepStm = $connection->prepare($sql_query);
+		$prepStm->execute();
+		$row = $prepStm->fetch();
+	} catch (PDOException $e) {
+		die($e->getMessage());
+	}
 }
 
 if (isset($_POST['btn-update'])) {
@@ -18,14 +23,14 @@ if (isset($_POST['btn-update'])) {
 	// variables for input data
 
 	// sql query for update data into database
-	$sql_query = "UPDATE estoque_produto SET Codigo_Produto='$CodigoProduto',Nome_Produto='$NomeProduto',Descricao_Produto='$DescricaoProduto',Quantidade_Estoque='$Quantidade',Preco = $Preco WHERE id_Estoque=" . $i;
-
+	$sql_query = "UPDATE Estoque_Produto SET Codigo_Produto='$CodigoProduto',Nome_Produto='$NomeProduto',Descricao_Produto='$DescricaoProduto',Quantidade_Estoque='$Quantidade',Preco = $Preco WHERE id_Estoque=$i";
+	$prepStm = $connection->prepare($sql_query);
 //"UPDATE `estoque_produto` SET `idESTOQUE_PRODUTO`= $i,`CODIGO_PRODUTO`= $CodigoProduto,`NOME_PRODUTO`= $NomeProduto,`DESCRICAO_PRODUTO`= $DescricaoProduto,`QUANTIDADE`= $Quantidade,`PRECO`= $Preco WHERE `idESTOQUE_PRODUTO`= $i";
 
 	// sql query for update data into database
 
 	// sql query execution function
-	if (mysql_query($sql_query)) {
+	if ($prepStm->fetch() > 0) {
 		?>
 		<script type="text/javascript">
 			alert('Dados atualizados com sucesso!');
