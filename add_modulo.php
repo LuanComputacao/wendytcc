@@ -3,7 +3,7 @@ include_once 'dbconfig.php';
 
 if (isset($_POST['btn-save'])) {
 	// variables for input data
-	$CodigoModulo = $_POST['CodigoModulo'];
+	$CodigoModulo = $_POST['CodigoModulo']; //Ip do módulo
 
 	if (($CodigoModulo == '')) {
 		?>
@@ -15,9 +15,17 @@ if (isset($_POST['btn-save'])) {
 		<?php
 	} else {
 		try {
-			$sql_query = "INSERT INTO modulo (Ip_Modulo,Status_Modulo) VALUES ('$CodigoModulo', 'I')";
-			$prepStm = $connection->query($sql_query);
-			$prepStm->execute();
+			$sql_query = "INSERT INTO Modulo (Ip_Modulo,Status_Modulo)VALUES('$CodigoModulo', 'Inativo')";
+			$prepStm = $connection->prepare($sql_query);
+			$rowsAffected = $prepStm->execute();
+			if ($rowsAffected < 0) {
+				echo "
+					<script type=\"text/javascript\">
+						alert('Ocorreu um erro ao salvar. Fale com o administrador do sistema!');
+						window.location.href = 'add_modulo.php';
+					</script>
+				";
+			}
 		} catch (PDOException $e) {
 			die($e->getMessage());
 		}
