@@ -31,16 +31,25 @@ CREATE TABLE Compra (
 
 CREATE TABLE Modulo (
 
-  id_Modulo     INT PRIMARY KEY,
-  Ip_Modulo     INT,
-  Status_Modulo VARCHAR(1)
+  id_Modulo     INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  Ip_Modulo     VARCHAR(15),
+  Status_Modulo VARCHAR(7)
 );
 
 
 ALTER TABLE Item_Pedido ADD CONSTRAINT fk_id_Compra FOREIGN KEY (id_Compra) REFERENCES Compra (id_Compra);
 
-ALTER TABLE Item_Pedido ADD CONSTRAINT fk_id_Modulo FOREIGN KEY (id_Modulo) REFERENCES Modulo (id_Modulo);
 
 ALTER TABLE Item_Pedido ADD CONSTRAINT fk_id_Estoque FOREIGN KEY (id_Estoque) REFERENCES Estoque_Produto (id_Estoque);
 
+ALTER TABLE Item_Pedido ADD CONSTRAINT fk_id_Modulo FOREIGN KEY (id_Modulo) REFERENCES Modulo (id_Modulo);
+ALTER TABLE Compra ADD CONSTRAINT fk_id_Modulo_Compra FOREIGN KEY (id_Modulo_Compra) REFERENCES Modulo (id_Modulo);
+
+ALTER TABLE wendy.Modulo MODIFY Ip_Modulo VARCHAR(15);
+ALTER TABLE wendy.Modulo MODIFY Status_Modulo VARCHAR(12);
+ALTER TABLE wendy.Item_Pedido DROP FOREIGN KEY fk_id_Modulo;
+ALTER TABLE wendy.Compra DROP FOREIGN KEY fk_id_Modulo_Compra;
+ALTER TABLE wendy.Modulo MODIFY id_Modulo INT(11) NOT NULL AUTO_INCREMENT;
+CREATE UNIQUE INDEX Modulo_id_Modulo_uindex ON wendy.Modulo (id_Modulo);
+ALTER TABLE Item_Pedido ADD CONSTRAINT fk_id_Modulo FOREIGN KEY (id_Modulo) REFERENCES Modulo (id_Modulo);
 ALTER TABLE Compra ADD CONSTRAINT fk_id_Modulo_Compra FOREIGN KEY (id_Modulo_Compra) REFERENCES Modulo (id_Modulo);
